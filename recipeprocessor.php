@@ -90,8 +90,7 @@ class RecipeProcessor {
 		
 		if (!empty($this->ingredients) && !empty($this->recipes)) {
 			
-			// Remove all ingredients that have expired
-			$this->removeExpiredIngredients();
+			
 
 			/**
 			 * Populate an associative array of ingredients for quicker processing - where key is an integer and value is the ingredient
