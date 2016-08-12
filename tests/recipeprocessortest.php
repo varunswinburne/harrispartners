@@ -1,3 +1,17 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" type="text/css" href="../css/styles.css" />
+  
+  <title>Harris Partners - Fridge Test - Unit Tests</title>
+</head>
+<body>
+<div id="upload">
+	<div id="title">
+		Fridge Test - Unit Tests
+	</div>
+	<div id="testresults">
 <?php
 
 	require_once('../recipeprocessor.php');
@@ -62,22 +76,22 @@
 		$recipeProcessor->setIngredients($ingredients);
 		$recipes=getjsoncontents("recipes.json");
 		$recipeProcessor->setRecipes($recipes);
-
-		$expected='a:3:{s:4:"name";s:14:"salad sandwich";s:11:"ingredients";a:2:{i:0;a:3:{s:4:"item";s:5:"bread";s:6:"amount";s:1:"2";s:4:"unit";s:6:"slices";}i:1;a:3:{s:4:"item";s:11:"mixed salad";s:6:"amount";s:3:"200";s:4:"unit";s:5:"grams";}}s:10:"expiryDate";s:10:"25/12/2016";}';
-		assertTrue("testfindtherightrecipe",assert(serialize($recipeProcessor->findTheRightRecipe())==$expected),"Find the Right Recipe");
+		$recipe=$recipeProcessor->findTheRightRecipe();
+		$expected='salad sandwich';
+		assertTrue("testfindtherightrecipe",assert($recipe['name']==$expected),"Find the Right Recipe");
 	
 	}
 	
-	function testfindtherightrecipeexpiredingredients()
+	function testnorecipesfound()
 	{
 		$recipeProcessor = new RecipeProcessor();
-		$ingredients=getcsvcontents("expired_ingredients.csv");
+		$ingredients=getcsvcontents("missing_ingredients.csv");
 		$recipeProcessor->setIngredients($ingredients);
 		$recipes=getjsoncontents("recipes.json");
 		$recipeProcessor->setRecipes($recipes);
 
 		
-		assertTrue("testfindtherightrecipeexpiredingredients",assert($recipeProcessor->findTheRightRecipe()=="Order Takeout"),"Find the Right Recipe - Expired Ingredients");
+		assertTrue("testnorecipesfound",assert($recipeProcessor->findTheRightRecipe()=="Order Takeout"),"Find the Right Recipe - No Recipes Found");
 	
 	}
 	
@@ -90,7 +104,7 @@
 		testingredientssetget();
 		testrecipessetget();
 		testfindtherightrecipe();
-		testfindtherightrecipeexpiredingredients();
+		testnorecipesfound();
 	}
 
 
@@ -105,3 +119,8 @@
 
 
 ?>
+</div></div>
+
+  
+</body>
+</html>

@@ -1,4 +1,20 @@
-#upload
+body
+{
+	background: url('../images/background.gif');
+	    background-size: cover;
+}
+
+form
+{
+padding:20px;
+}
+
+#testresults
+{
+	padding:10px;
+}
+
+#upload, #index
 {
     position: absolute;
     left: 35%;
@@ -7,9 +23,35 @@
     margin-top: -10px;
     text-align: center;
     width: 500px;
+    
+    min-height:400px;
+    background:rgba(255,255,255,0.6);
 }
 
-#chooseButton,#uploadButton
+#index
+{
+	min-height:300px;
+}
+
+
+
+.link
+{
+	text-decoration: none;
+	width:150px;
+	    line-height: 5.0em;
+}
+
+#title
+{
+    padding: 20px;
+    font-weight: bold;
+    font-size: 25px;
+    color:#ffffff;
+    background:#000000;
+}
+
+#chooseButton,#uploadButton,.link
 {
 	border:none;
 	border-radius:10px;
@@ -20,7 +62,7 @@
 	width:100%;
 }
 
-#chooseButton,#uploadButton
+#chooseButton,#uploadButton,.link
 {
 	background:#FF3232;
 	

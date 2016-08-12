@@ -3,40 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="stylesheet" type="text/css" href="css/styles.css" />
-  
+  <script type="text/javascript" src="js/script.js"></script>
   <title>Harris Partners - Fridge Test</title>
 </head>
 <body>
 <div id="upload">
-  <form action="" method="post" enctype="multipart/form-data" id="form">
-<input type="button" id="chooseButton" value="Choose Ingredients and Recipe Files"/><br/>
-    <input type="file" id="file" name="files[]" multiple="multiple"/><br/>
-  <input type="button" value="Process!" id="uploadButton" />
-</form>
-<div id="fileNames">
-
-</div>
-
-
+	<div id="title">
+		Fridge Test - My Recipe for Today
+	</div>
+	
+	<form action="" method="post" enctype="multipart/form-data" id="form">
+		<input type="button" id="chooseButton" value="Pick Ingredients and Recipe Files"/><br/>
+		<input type="file" id="file" name="files[]" multiple="multiple"/><br/>
+		<input type="button" value="Process!" id="uploadButton" />
+	</form>
+	<div id="fileNames">
+	
+	</div>
 
 
 <?php
 
+	/*
+	* Load the Recipe Processor
+	*/
 	require_once('recipeprocessor.php');
+	/*
+	* Load the Utils File
+	*/
 	require_once('recipeutils.php');
 	
+	/*
+	* Initialise valid file types
+	*/
 	$valid_formats = array("csv", "json");
 	
 	$message="";
 	$count=0;
-	
+	$recipe=false;
+	/*
+	* Process files if uploaded
+	*/
 	if(isset($_POST) and $_SERVER['REQUEST_METHOD'] == "POST")
 	{
 		foreach ($_FILES['files']['name'] as $f => $name) {  
 		
 			$extension = pathinfo($name, PATHINFO_EXTENSION);
 			
-			
+			/*
+			* Skip invalid files that are not csv nor json
+			*/
 			if(! in_array(pathinfo($name, PATHINFO_EXTENSION), $valid_formats) ){
 				$message.=$name." is an invalid file<br/>";
 				continue; // Skip invalid file formats
@@ -46,11 +62,16 @@
 			{
 				if($extension=='csv')
 				{
+					/*
+					* Read CSV Contents
+					*/
 					$ingredients=getcsvcontents($_FILES['files']['tmp_name'][$count]);
 				}
 				if($extension=='json')
 				{
-				
+					/*
+					* Read JSON Contents
+					*/
 					$recipes=getjsoncontents($_FILES['files']['tmp_name'][$count]);
 				}
 			}
@@ -58,18 +79,29 @@
 		
 		}
 		
+		/*
+		* If ingredients and recipes have been  successfully loaded, process them
+		*/
 		if($ingredients && $recipes)
 		{
 			$recipeProcessor = new RecipeProcessor();
 			$recipeProcessor->setIngredients($ingredients);
 			$recipeProcessor->setRecipes($recipes);
-			
+			/*
+			* Find the recipe
+			*/
 			$recipe = $recipeProcessor->findTheRightRecipe();
 		}
+		/*
+		* Invalid CSV file
+		*/
 		if(!$ingredients)
 		{
 			$message.="Invalid csv file<br/>";
 		}
+		/*
+		* Invalid JSON file
+		*/
 		if(!$recipes)
 		{
 			$message.="Invalid json file<br/>";
@@ -79,11 +111,24 @@
 	
 	
 
-	
+	/*
+	*	Display the recipe if fetched
+	*/
 	if($recipe)
 	{
-		echo '<div class="recipediv">'.$recipe.'</div>'; 
+	
+		if(is_array($recipe))
+		{
+			echo '<div class="recipediv">'.$recipe['name'].'</div>'; 
+		}
+		else
+		{
+			echo '<div class="recipediv">'.$recipe.'</div>'; 
+		}
 	}
+	/*
+	*	Display an error message if not fetched
+	*/
 	else if($message)
 	{
 		echo '<div class="errordiv">'.$message.'</div>';
@@ -91,78 +136,11 @@
 
 ?>
 </div>
-<script type="text/javascript" >
 
 
 
-	function uploadAndProcessFiles()
-	{
-		var chooseHiddenButton = document.getElementById("file");
-		var length = chooseHiddenButton.files.length;
-		var hasJson=false;
-		var hasCsv=false;
-		var files=[];
-		var fileNames = document.getElementById("fileNames");
-		fileNames.innerHTML = "";
-		for (var i = 0; i < chooseHiddenButton.files.length; i++)
-		{
-			var fileName = chooseHiddenButton.files[i].name;
-			var extensionFields = fileName.split(".");
-			var extension = extensionFields[(extensionFields.length)-1];
-			files.push(fileName);
-			if(extension=='csv')
-			{
-				hasCsv=true;
-			}
-			if(extension=='json')
-			{
-				hasJson=true;
-			}
-			
-		 }
-		 
-		if(length==2&& hasCsv && hasJson)
-		{
-			document.getElementById("form").submit(); 
-		}
-		else
-		{
-			if(length==0)
-			{
-				fileNames.innerHTML = "No files uploaded. Please select ingredients.csv and recipes.json to continue";
-			}
-			else
-			{
-				fileNames.innerHTML="Please select only ingredients.csv and recipes.json to continue<br/><br/><u>Files Uploaded</u><br/><br/>";
-				for(var fileIndex=0;fileIndex<length;fileIndex++)
-				{
-					fileNames.innerHTML+=files[fileIndex]+"<br/>";
-				}
-			}
-		}
-		
-	}
-
-  	function initiateUpload()
-	{
-	
-		var chooseHiddenButton = document.getElementById("file");
-		chooseHiddenButton.click();
-	}
-	function init()
-	{
-		var chooseButton = document.getElementById("chooseButton");
-		chooseButton.onclick=initiateUpload;
-		var uploadButton = document.getElementById("uploadButton");
-		uploadButton.onclick=uploadAndProcessFiles;
-		var acc = document.getElementsByClassName("accordion");
-		
-		
-	
-	}
-	
-	window.onload=init;
-  </script>
   
 </body>
+
+
 </html>

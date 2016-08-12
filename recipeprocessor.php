@@ -163,7 +163,7 @@ class RecipeProcessor {
 				/*
 					Pick the first recipe off the list
 				*/
-				$this->recommendedRecipe = $this->recipes[0]['name'];
+				$this->recommendedRecipe = $this->recipes[0];
 			} 
 			else 
 			{
