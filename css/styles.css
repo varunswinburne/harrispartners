@@ -1,0 +1,67 @@
+#upload
+{
+    position: absolute;
+    left: 35%;
+    top: 30%;
+    margin-left: -10px;
+    margin-top: -10px;
+    text-align: center;
+    width: 500px;
+}
+
+#chooseButton,#uploadButton
+{
+	border:none;
+	border-radius:10px;
+	font-size:20px;
+	font-weight:bold;
+	color:#FFF;
+	padding:10px;
+	width:100%;
+}
+
+#chooseButton,#uploadButton
+{
+	background:#FF3232;
+	
+}
+#uploadButton
+{
+	background:#000000;
+	
+}
+
+#file
+{
+	display:none;
+}
+
+#fileNames
+{
+    padding: 10px;
+    font-size: 16px;
+    font-weight:bold;
+}
+
+.errordiv {
+    background-color: #FF0000;
+    color: #fff;
+    padding: 18px;
+    font-size:18px;
+    border-radius:10px;
+    border: none;
+    outline: none;
+    width: 50%;
+    text-align: center;
+    margin: 0 auto;}
+.recipediv {
+    background-color: #428bca;
+    color: #fff;
+    padding: 18px;
+    font-size:18px;
+    border-radius:10px;
+    border: none;
+    outline: none;
+    width: 50%;
+    text-align: center;
+    margin: 0 auto;}
